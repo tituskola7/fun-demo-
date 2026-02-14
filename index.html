@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Open Secret</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #ff4e8d, #b23cff, #ff1e56);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  padding: 20px;
+  z-index: 2;
+}
+
+h1 {
+  font-size: clamp(2rem, 7vw, 4rem);
+  text-shadow: 0 0 20px #ffb6c1, 0 0 40px #ff69b4;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* FORM STYLE BUTTON LAYOUT */
+.buttons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* BUTTON STYLE */
+button {
+  padding: 15px 28px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  min-width: 120px;
+}
+
+/* YES BUTTON */
+#yesBtn {
+  background: linear-gradient(45deg, #ffffff, #ff85d2);
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+}
+
+#yesBtn:hover {
+  transform: scale(1.1);
+}
+
+/* NO BUTTON */
+#noBtn {
+  background: #222;
+  color: white;
+  position: relative;
+}
+
+/* CELEBRATION */
+.celebration {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.heart {
+  position: absolute;
+  font-size: 24px;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  to { transform: scale(12); opacity: 0; }
+}
+
+.gif {
+  position: absolute;
+  width: 120px;
+  animation: popIn 1s ease forwards;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="mainContent">
+  <h1>HEY,<br>WILL YOU BE MY VALENTINE? 💘</h1>
+  <div class="buttons">
+    <button id="yesBtn">YES ❤️</button>
+    <button id="noBtn">NO 🙈</button>
+  </div>
+</div>
+
+<div class="celebration" id="celebration"></div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const mainContent = document.getElementById("mainContent");
+const celebration = document.getElementById("celebration");
+
+/* MOVE NO BUTTON RANDOMLY */
+function moveNoButton() {
+  const maxX = window.innerWidth - noBtn.offsetWidth;
+  const maxY = window.innerHeight - noBtn.offsetHeight;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "fixed";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+/* ESCAPE EVENTS */
+noBtn.addEventListener("mouseenter", moveNoButton); // desktop
+noBtn.addEventListener("touchstart", moveNoButton); // mobile
+noBtn.addEventListener("click", moveNoButton);
+
+/* HEARTS */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = ["❤️","💖","💘","💝","💕","💞","💓"][Math.floor(Math.random()*7)];
+  heart.style.left = Math.random()*100 + "vw";
+  heart.style.animationDuration = 4 + Math.random()*3 + "s";
+  celebration.appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}
+
+/* FIREWORK */
+function firework() {
+  const f = document.createElement("div");
+  f.className = "firework";
+  f.style.left = Math.random()*100 + "vw";
+  f.style.top = Math.random()*100 + "vh";
+  celebration.appendChild(f);
+  setTimeout(()=>f.remove(),1000);
+}
+
+/* GIFS */
+function addGif(src) {
+  const gif = document.createElement("img");
+  gif.src = src;
+  gif.className = "gif";
+  gif.style.left = Math.random()*70 + "vw";
+  gif.style.top = Math.random()*70 + "vh";
+  celebration.appendChild(gif);
+}
+
+/* YES CLICK */
+yesBtn.onclick = () => {
+  mainContent.innerHTML = `<h1>I KNEW YOU LOVE ME 💞💥</h1>`;
+  setInterval(createHeart, 200);
+  setInterval(firework, 500);
+
+  addGif("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDNyYTM1d2NzYXJtMjdnc2R3bWlvZ3JheGkxbTJwdzdyMDZnaXNsOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/n7PjZc4B0DJHMfISNk/giphy.gif");
+  addGif("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjljYW94MGM1N2doNTVuZzF6aTI4ZmIzM2R2OWwwdHR6MTR0amNuZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tk8cksLHlE7Gpo5lSI/giphy.gif");
+  addGif("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3p4a2piYWh5OGNzcTZyeXdvOTE5NjVvanRid29lNTA5dHByb2QweiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cT3gcbv1RHQrryRxX9/giphy.gif");
+};
+
+setInterval(createHeart, 400);
+</script>
+
+</body>
+</html>
